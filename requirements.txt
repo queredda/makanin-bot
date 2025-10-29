@@ -1,0 +1,13 @@
+# Core Dependencies
+python-dotenv==1.0.0
+requests==2.31.0
+
+# AI & NLU
+google-generativeai==0.7.0
+ensembledata==1.0.0
+
+# Discord Integration
+discord.py==2.3.2
+
+# Optional: For better stability
+aiohttp==3.9.1
