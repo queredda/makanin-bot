@@ -1,0 +1,47 @@
+2024-01-15 09:15:30,123 - ERROR - [Redis Connection] Failed to connect to Redis: Connection refused
+2024-01-15 09:15:30,456 - ERROR - [Context Manager] Memory initialization failed, using in-memory fallback
+2024-01-15 09:20:15,789 - ERROR - [NLU Tool] Gemini API quota exceeded: quota-exceeded
+2024-01-15 09:20:16,123 - ERROR - [Agent] NLU analysis failed with error: NLU analysis failed: Gemini API quota exceeded: quota-exceeded
+2024-01-15 09:25:45,456 - ERROR - [TikTok Search] API authentication failed: Invalid API key
+2024-01-15 09:25:45,789 - ERROR - [Agent] Food search workflow interrupted: TikTok Search API authentication failed
+2024-01-15 09:30:22,123 - ERROR - [Location Resolution] Google Maps API timeout: Request timed out after 30 seconds
+2024-01-15 09:30:22,456 - WARNING - [Agent] Skipped: Could not resolve location for 'Mysterious Restaurant'
+2024-01-15 09:35:10,789 - ERROR - [Place Extraction] Failed to parse Gemini response: JSON decode error
+2024-01-15 09:35:11,123 - ERROR - [Place Extraction] Fallback parsing failed: No place name found
+2024-01-15 09:35:11,456 - ERROR - [Agent] Skipped: Could not extract restaurant name
+2024-01-15 09:40:33,456 - ERROR - [Weather Tool] Invalid coordinates: latitude=91.0, longitude=181.0
+2024-01-15 09:40:33,789 - WARNING - [Agent] Weather information unavailable for venue
+2024-01-15 09:45:18,123 - ERROR - [Agent] Unhandled exception in process_message: list index out of range
+2024-01-15 09:45:18,456 - ERROR - [Traceback] Traceback (most recent call last):
+  File "agent/agent.py", line 47, in process_message
+    context = self.context_manager.process_user_input(user_id, user_message)
+  File "agent/memory.py", line 123, in process_user_input
+    last_message = history[-1]
+IndexError: list index out of range
+2024-01-15 09:50:44,789 - ERROR - [Tool Executor] Tool 'nonexistent_tool' not found in registry
+2024-01-15 09:50:45,123 - ERROR - [Agent] Tool execution failed: Tool 'nonexistent_tool' not found
+2024-01-15 09:55:27,456 - ERROR - [Conversation Tool] Empty conversation history provided
+2024-01-15 09:55:27,789 - ERROR - [Conversation Tool] Cannot generate context without history
+2024-01-15 10:00:12,123 - ERROR - [Configuration] Missing required environment variable: GEMINI_API_KEY
+2024-01-15 10:00:12,456 - CRITICAL - [Agent] Failed to initialize: Gemini API key not configured
+2024-01-15 10:05:38,789 - ERROR - [Redis] Session cleanup failed: Redis connection lost
+2024-01-15 10:05:39,123 - WARNING - [Context Manager] Skipping session cleanup due to connection issues
+2024-01-15 10:10:55,456 - ERROR - [TikTok Search] Rate limit exceeded: Too many requests per minute
+2024-01-15 10:10:55,789 - WARNING - [Agent] Rate limiting TikTok search requests
+2024-01-15 10:15:41,123 - ERROR - [Tool Registry] Duplicate tool registration attempted: nlu
+2024-01-15 10:15:41,456 - WARNING - [Tool Registry] Tool 'nlu' already registered, skipping registration
+
+=== ERROR SUMMARY ===
+Total errors: 15
+Critical errors: 1 (Agent initialization failure)
+Connection errors: 3 (Redis connection issues)
+API errors: 5 (Gemini, TikTok, Google Maps timeouts/quota)
+Validation errors: 4 (Invalid inputs, parsing errors)
+Logic errors: 2 (Index out of range, tool not found)
+
+Most common error sources:
+1. External API failures (33%)
+2. Connection issues (20%)
+3. Input validation (27%)
+4. Logic errors (13%)
+5. Configuration issues (7%)

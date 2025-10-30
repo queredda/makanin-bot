@@ -98,12 +98,12 @@ class EnsembleDataClient:
 
             # Log API usage for transparency
             if hasattr(result, 'units_charged'):
-                print(f"📊 Ensemble Data API units charged: {result.units_charged}")
+                print(f"Ensemble Data API units charged: {result.units_charged}")
 
             return venues
 
         except Exception as e:
-            print(f"❌ Error querying Ensemble Data API: {e}")
+            print(f"Error querying Ensemble Data API: {e}")
             return []
 
 
@@ -224,14 +224,14 @@ class OpenWeatherClient:
         # Use Gemini to paraphrase and enhance
         if language == "id":
             prompt = f"""Paraphrase this weather data into a friendly, natural Indonesian summary for someone going to a restaurant.
-Include any weather warnings if needed (e.g., "⚠️  Watchout rain possible" if humidity is high and clouds/rain likely).
+Include any weather warnings if needed (e.g., " Watchout rain possible" if humidity is high and clouds/rain likely).
 
 Weather data: {raw_weather}
 
 Requirements:
 - Keep it SHORT (1-2 sentences max)
 - Use natural language, not technical terms
-- If rain is likely (humidity >80% or clouds >70%), add a warning like: ⚠️  Bersiaplah untuk hujan/Watchout hujan mungkin
+- If rain is likely (humidity >80% or clouds >70%), add a warning like:  Bersiaplah untuk hujan/Watchout hujan mungkin
 - Be conversational and friendly
 - Use emoji appropriately
 - For Indonesian output, use Indonesian names for conditions
@@ -239,26 +239,26 @@ Requirements:
 Example output format:
 "Cerah dengan suhu hangat 26°C, anginnya lembut. Tetap nyaman untuk makan di luar!"
 or
-"Mendung dengan kelembaban tinggi 85%, ⚠️  Bersiaplah untuk hujan. Mungkin lebih baik di dalam rumah."
+"Mendung dengan kelembaban tinggi 85%,  Bersiaplah untuk hujan. Mungkin lebih baik di dalam rumah."
 
 Return ONLY the paraphrased weather summary, nothing else:"""
         else:
             prompt = f"""Paraphrase this weather data into a friendly, natural English summary for someone going to a restaurant.
-Include any weather warnings if needed (e.g., "⚠️  Watchout rain possible" if humidity is high and clouds/rain likely).
+Include any weather warnings if needed (e.g., " Watchout rain possible" if humidity is high and clouds/rain likely).
 
 Weather data: {raw_weather}
 
 Requirements:
 - Keep it SHORT (1-2 sentences max)
 - Use natural language, not technical terms
-- If rain is likely (humidity >80% or clouds >70%), add a warning like: ⚠️  Watchout rain possible or ⚠️  Bring an umbrella!
+- If rain is likely (humidity >80% or clouds >70%), add a warning like:  Watchout rain possible or  Bring an umbrella!
 - Be conversational and friendly
 - Use emoji appropriately
 
 Example output format:
 "Sunny and warm at 26°C with a gentle breeze. Perfect weather to dine outside!"
 or
-"Cloudy with high humidity 85%, ⚠️  Watchout rain possible! Better to eat indoors."
+"Cloudy with high humidity 85%,  Watchout rain possible! Better to eat indoors."
 
 Return ONLY the paraphrased weather summary, nothing else:"""
 
@@ -267,7 +267,7 @@ Return ONLY the paraphrased weather summary, nothing else:"""
             summary = response.text.strip()
             return summary if summary else self._fallback_summary(weather, language)
         except Exception as e:
-            print(f"  ⚠️  Weather paraphrasing error: {e}")
+            print(f"   Weather paraphrasing error: {e}")
             # Fallback to simple format if Gemini fails
             return self._fallback_summary(weather, language)
 
@@ -276,7 +276,7 @@ Return ONLY the paraphrased weather summary, nothing else:"""
         # Detect if rain is likely
         rain_warning = ""
         if weather.humidity > 80 or weather.rain_chance > 70:
-            rain_warning = " ⚠️  Watchout hujan!" if language == "id" else " ⚠️  Watchout rain!"
+            rain_warning = "  Watchout hujan!" if language == "id" else "  Watchout rain!"
 
         if language == "id":
             return f"{weather.condition}, {weather.temperature}°C, Kelembaban {weather.humidity}%, Angin {weather.wind_speed:.1f} km/j{rain_warning}"

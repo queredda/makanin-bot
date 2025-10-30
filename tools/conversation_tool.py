@@ -88,7 +88,7 @@ class ConversationTool(BaseTool):
             conversation_history = params.get("conversation_history", [])
             language = params.get("language", "id")
 
-            print(f"💬 [Conversation Tool] Processing message: '{user_message[:50]}...' (language: {language})")
+            print(f"[Conversation Tool] Processing message: '{user_message[:50]}...' (language: {language})")
 
             # System prompt for Makanin personality
             system_prompt = """You are Makanin, a super friendly and enthusiastic food-finder bot! 🍜✨
@@ -135,7 +135,7 @@ Makanin:"""
             response_obj = self.model.generate_content(final_prompt)
             response = response_obj.text.strip()
 
-            print(f"✅ [Conversation Tool] Generated response: '{response[:50]}...'")
+            print(f"[Conversation Tool] Generated response: '{response[:50]}...'")
 
             # Return the conversation response
             result_data = {

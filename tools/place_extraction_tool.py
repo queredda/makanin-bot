@@ -89,7 +89,7 @@ class PlaceExtractionTool(BaseTool):
             # Method 1: Pattern matching
             extracted_name = self._extract_by_patterns(description, keywords, hashtags)
             if extracted_name:
-                print(f"✅ [Place Extraction] Pattern match found: '{extracted_name}'")
+                print(f"[Place Extraction] Pattern match found: '{extracted_name}'")
                 return ToolResult(
                     success=True,
                     data={
@@ -106,7 +106,7 @@ class PlaceExtractionTool(BaseTool):
             # Method 2: Gemini AI extraction
             extracted_name = self._extract_by_gemini(description, keywords)
             if extracted_name:
-                print(f"✅ [Place Extraction] Gemini extraction found: '{extracted_name}'")
+                print(f"[Place Extraction] Gemini extraction found: '{extracted_name}'")
                 return ToolResult(
                     success=True,
                     data={
@@ -123,7 +123,7 @@ class PlaceExtractionTool(BaseTool):
             # Method 3: Hashtag fallback
             extracted_name = self._extract_from_hashtags(hashtags, keywords)
             if extracted_name:
-                print(f"✅ [Place Extraction] Hashtag fallback found: '{extracted_name}'")
+                print(f"[Place Extraction] Hashtag fallback found: '{extracted_name}'")
                 return ToolResult(
                     success=True,
                     data={
@@ -137,7 +137,7 @@ class PlaceExtractionTool(BaseTool):
                     }
                 )
 
-            print(f"❌ [Place Extraction] No restaurant name found")
+            print(f"[Place Extraction] No restaurant name found")
             return ToolResult(
                 success=False,
                 error="Could not extract restaurant name from description",
@@ -196,7 +196,7 @@ If NOT about food matching these keywords, return "Not found"."""
         prompt = f"""Extract the ACTUAL RESTAURANT or FOOD VENUE NAME from this TikTok description.
 
 PRIORITY - Look for names in this order:
-1. Names directly after 📍 symbol (e.g., 📍@RESTAURANT NAME or 📍RESTAURANT NAME)
+1. Names directly after symbol (e.g., 📍@RESTAURANT NAME or 📍RESTAURANT NAME)
 2. Names after @ symbol (e.g., @RESTAURANT NAME)
 3. Restaurant names in descriptive text mentioning the venue
 4. Restaurant names in hashtags (e.g., #restaurantname or #misoaqiuqiu99)

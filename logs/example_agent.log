@@ -1,0 +1,39 @@
+2024-01-15 10:30:15,123 - INFO - Makanin Agent initialized with tools: ['nlu', 'tiktok_search', 'location_resolution', 'weather', 'conversation', 'place_extraction']
+2024-01-15 10:30:45,456 - INFO - [Agent] Processing message from user123: 'cariin bakso dong di jogja'
+2024-01-15 10:30:45,789 - INFO - [NLU Tool] Analyzing: 'cariin bakso dong di jogja'
+2024-01-15 10:30:46,123 - INFO - [NLU Tool] Intent: find_food, Keywords: ['bakso'], Location: Jogja
+2024-01-15 10:30:46,456 - INFO - 🔍 [Agent] Starting food search workflow
+2024-01-15 10:30:47,789 - INFO - [TikTok Search] Found 3 viral videos for keywords: ['bakso'] in location: Jogja
+2024-01-15 10:30:48,123 - INFO - [Agent] Found 3 TikTok results
+2024-01-15 10:30:48,456 - INFO - --- Processing TikTok result 1 ---
+2024-01-15 10:30:48,789 - INFO - [Place Extraction] Extracted place name: Bakso Pak Joko
+2024-01-15 10:30:49,123 - INFO - [Location Resolution] Found location: Jl. Malioboro No. 123, Yogyakarta
+2024-01-15 10:30:49,456 - INFO - [Weather Tool] Weather: Cerah, 28°C
+2024-01-15 10:30:50,789 - INFO - [Agent] Food search completed: 1 venues found
+2024-01-15 10:30:51,123 - INFO - [Agent] Generated food response for 1 venues in Indonesian
+2024-01-15 10:32:15,456 - INFO - [Agent] Processing message from user456: 'halo, apa kabar?'
+2024-01-15 10:32:15,789 - INFO - [NLU Tool] Analyzing: 'halo, apa kabar?'
+2024-01-15 10:32:16,123 - INFO - [NLU Tool] Intent: chat, Keywords: [], Location: None
+2024-01-15 10:32:16,456 - INFO - [Agent] Handling conversation intent
+2024-01-15 10:32:17,789 - INFO - [Conversation Tool] Generated response in Indonesian
+2024-01-15 10:35:30,123 - INFO - [Agent] Processing message from user789: 'find ramen in Tokyo'
+2024-01-15 10:35:30,456 - INFO - [NLU Tool] Analyzing: 'find ramen in Tokyo'
+2024-01-15 10:35:30,789 - INFO - [NLU Tool] Intent: find_food, Keywords: ['ramen'], Location: Tokyo
+2024-01-15 10:35:31,123 - INFO - 🔍 [Agent] Starting food search workflow
+2024-01-15 10:35:31,456 - INFO - [TikTok Search] Found 2 viral videos for keywords: ['ramen'] in location: Tokyo
+2024-01-15 10:35:32,789 - INFO - [Agent] Found 2 TikTok results
+2024-01-15 10:35:33,123 - ERROR - [Location Resolution] Could not resolve location for 'Unknown Ramen Place'
+2024-01-15 10:35:33,456 - INFO - --- Processing TikTok result 2 ---
+2024-01-15 10:35:34,789 - INFO - [Place Extraction] Extracted place name: Ichiran Ramen
+2024-01-15 10:35:35,123 - INFO - [Location Resolution] Found location: Shibuya, Tokyo
+2024-01-15 10:35:35,456 - INFO - [Weather Tool] Weather: Clear, 22°C
+2024-01-15 10:35:36,789 - INFO - [Agent] Food search completed: 1 venues found
+2024-01-15 10:35:37,123 - INFO - [Agent] Generated food response for 1 venues in English
+2024-01-15 10:40:22,456 - ERROR - [Agent] Error processing message: TikTok Search API timeout
+2024-01-15 10:40:22,789 - INFO - [Agent] Processing failed, returning error message
+2024-01-15 10:45:10,123 - INFO - [Agent] Processing message from user999: 'carinya yang halal ya'
+2024-01-15 10:45:10,456 - INFO - [NLU Tool] Analyzing: 'carinya yang halal ya'
+2024-01-15 10:45:10,789 - INFO - [NLU Tool] Intent: find_food, Keywords: ['makanan'], Location: None, Constraints: {'halal': True}
+2024-01-15 10:45:11,123 - INFO - 🔍 [Agent] Starting food search workflow
+2024-01-15 10:45:11,456 - WARNING - [TikTok Search] No results found for keywords ['makanan'] with constraints {'halal': True}
+2024-01-15 10:45:11,789 - INFO - [Agent] Food search completed: 0 venues found

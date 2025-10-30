@@ -80,7 +80,7 @@ class ToolRegistry:
             self._categories[category] = []
         self._categories[category].append(tool.name)
 
-        print(f"🔧 Registered tool: {tool.name} (category: {category})")
+        print(f"Registered tool: {tool.name} (category: {category})")
 
     def get_tool(self, name: str) -> Optional[BaseTool]:
         """Get a tool by name"""
@@ -157,13 +157,13 @@ class ToolExecutor:
             # Store execution history
             self.execution_history.append(result)
 
-            print(f"✅ Tool '{tool_name}' executed successfully ({result.execution_time:.2f}s)")
+            print(f"Tool '{tool_name}' executed successfully ({result.execution_time:.2f}s)")
             return result
 
         except Exception as e:
             execution_time = time.time() - start_time
             error_msg = f"Error executing tool '{tool_name}': {str(e)}"
-            print(f"❌ {error_msg}")
+            print(f"{error_msg}")
             traceback.print_exc()
 
             result = ToolResult(

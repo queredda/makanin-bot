@@ -54,7 +54,7 @@ class NLUTool(BaseTool):
             params = input_data.parameters
             text = params["text"].strip()
 
-            print(f"🧠 [NLU Tool] Analyzing: '{text}'")
+            print(f"[NLU Tool] Analyzing: '{text}'")
 
             # Detect language first
             language = self._detect_language(text)
@@ -63,7 +63,7 @@ class NLUTool(BaseTool):
             intent_data = self._parse_with_gemini(text, language)
 
             print(
-                f"✅ [NLU Tool] Intent: {intent_data['intent']}, Keywords: {intent_data['keywords']}, Location: {intent_data.get('location')}")
+                f"[NLU Tool] Intent: {intent_data['intent']}, Keywords: {intent_data['keywords']}, Location: {intent_data.get('location')}")
 
             return ToolResult(
                 success=True,
@@ -147,7 +147,7 @@ Return ONLY the JSON, no explanation:"""
             }
 
         except Exception as e:
-            print(f"❌ [NLU Tool] Gemini parsing failed: {e}")
+            print(f"[NLU Tool] Gemini parsing failed: {e}")
             # Fallback to basic parsing
             return {
                 "intent": "chat",

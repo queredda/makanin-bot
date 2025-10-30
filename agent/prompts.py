@@ -102,16 +102,16 @@ FOOD_RESPONSE_TEMPLATE_EN = """🎉 Found some delicious viral spots for you! He
 
 VENUE_TEMPLATE_ID = """━━━━━━━━━━━━━━━━━━━━━━━━━
 #{index} 🍽️  {name}
-📍 {address}
+{address}
 {weather_info}
-🗺️  Maps: {maps_link}
+ Maps: {maps_link}
 🎥 Viral di TikTok: {tiktok_link}"""
 
 VENUE_TEMPLATE_EN = """━━━━━━━━━━━━━━━━━━━━━━━━━
 #{index} 🍽️  {name}
-📍 {address}
+{address}
 {weather_info}
-🗺️  Maps: {maps_link}
+ Maps: {maps_link}
 🎥 Viral on TikTok: {tiktok_link}"""
 
 NO_RESULTS_ID = """Hmm... kayaknya belum ada yang cocok nih 🤔 Mau coba cari di area lain? Bisa juga dengan keyword yang berbeda! 😊"""
@@ -149,7 +149,7 @@ def format_venue_info(venue: dict, index: int, language: str) -> str:
 
     weather_info = ""
     if venue.get("weather_summary"):
-        weather_label = "🌤️  Cuaca:" if language == "id" else "🌤️  Weather:"
+        weather_label = " Cuaca:" if language == "id" else " Weather:"
         weather_info = f"{weather_label} {venue['weather_summary']}"
 
     return template.format(

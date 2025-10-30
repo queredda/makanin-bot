@@ -74,12 +74,12 @@ class WeatherTool(BaseTool):
             lng = params["longitude"]
             language = params.get("language", "id")
 
-            print(f"🌤️ [Weather Tool] Getting weather for coordinates: ({lat}, {lng})")
+            print(f"[Weather Tool] Getting weather for coordinates: ({lat}, {lng})")
 
             # Get weather data
             weather_info = self.client.get_current_weather(lat, lng)
             if not weather_info:
-                print(f"❌ [Weather Tool] Could not get weather data for coordinates ({lat}, {lng})")
+                print(f"[Weather Tool] Could not get weather data for coordinates ({lat}, {lng})")
                 return ToolResult(
                     success=False,
                     error=f"Could not get weather data for coordinates: ({lat}, {lng})",
@@ -92,7 +92,7 @@ class WeatherTool(BaseTool):
 
             # Format weather summary
             weather_summary = self.client.format_weather_summary(weather_info, language=language)
-            print(f"✅ [Weather Tool] Weather summary: {weather_summary}")
+            print(f"[Weather Tool] Weather summary: {weather_summary}")
 
             # Build result data
             weather_data = {

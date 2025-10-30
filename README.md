@@ -1,371 +1,453 @@
-#  Makanin - Viral Food Finder Bot
+# Makanin - Bot Pencari Makanan Viral
 
+Makanin adalah bot AI percakapan yang membantu kamu menemukan tempat makan viral menggunakan bahasa alami. Bicara secara
+natural dalam Bahasa Indonesia atau English, dan bot akan menemukan restoran trending serta tempat makan dengan
+informasi cuaca real-time.
+
+**Makanin - Viral Food Finder Bot**
 Makanin is a conversational AI bot that helps you discover viral food spots using natural language. Talk naturally in Indonesian or English, and the bot will find trending restaurants and food places with real-time weather information.
 
+## Tim / Team
 
-## Team
-| Nama | NIM |
-|--|--| 
-| Flavia Hidayriamraata Pualam | 22/494376/TK54219 |
-| Mahsa Quereda Bahjah | 22/503299/TK/54984 |
+| Nama / Name                  | NIM                |
+|------------------------------|--------------------|
+| Flavia Hidayriamraata Pualam | 22/494376/TK54219  |
+| Mahsa Quereda Bahjah         | 22/503299/TK/54984 |
 
-## Features
+## Fitur Utama / Main Features
 
-**Natural Language Understanding**
-- Detects intent automatically (food finding vs. general chat)
-- Extracts cuisine keywords, location hints, and constraints
-- Supports both Bahasa Indonesia and English
+### Pemahaman Bahasa Alami / Natural Language Understanding
 
-**TikTok Integration**
-- Real-time searches on TikTok for viral food content
-- Powered by Ensemble Data API (official `ensembledata` library)
-- Retrieves video metrics (likes, views, shares)
-- Extracts place names from TikTok video descriptions using Gemini AI
+- Deteksi intent otomatis (pencarian makanan vs chat umum)
+- Ekstrak keyword makanan, lokasi, dan constraint
+- Support Bahasa Indonesia dan English
 
- **Location & Weather**
-- **Google Maps API**: Resolve locations and get shareable links
-- **OpenWeather API**: Real-time weather at venues
-- Shows temperature, humidity, wind speed, and weather conditions
- 
-**Smart Responses**
-- Returns TikTok video links with engagement metrics
-- Provides clickable Google Maps links to venues
-- Shows current weather at each location
-- Ranks results by TikTok virality (engagement)
+### Integrasi TikTok / TikTok Integration
 
-**Discord Bot Integration**
-- Natural conversation interface (no slash commands)
-- Automatic intent detection
-- Rich embeds with formatted results
-- Real-time typing indicators
-- Multi-turn conversation support
+- Pencarian real-time di TikTok untuk konten makanan viral
+- Powered by Ensemble Data API
+- Mengambil metrik video (likes, views, shares)
+- Ekstrak nama tempat dari deskripsi TikTok menggunakan Gemini AI
 
-## Project Structure
+### Lokasi & Cuaca / Location & Weather
+
+- **Google Maps API**: Resolusi lokasi dan link yang bisa dishare
+- **OpenWeather API**: Cuaca real-time di lokasi tempat makan
+- Menampilkan suhu, humidity, wind speed, dan kondisi cuaca
+
+### Respons Cerdas / Smart Responses
+
+- Return link video TikTok dengan metrik engagement
+- Sediakan link Google Maps yang bisa diklik
+- Tampilkan cuaca saat ini di setiap lokasi
+- Rank hasil berdasarkan virality TikTok (engagement)
+
+### Bot Discord / Discord Bot Integration
+
+- Interface percakapan natural (tidak perlu slash commands)
+- Deteksi intent otomatis
+- Rich embeds dengan hasil terformat
+- Typing indicators real-time
+- Support percakapan multi-turn
+
+### Memori Persisten / Persistent Memory
+
+- **Redis Integration**: Simpan percakapan selama 7 hari
+- **Session Management**: Ingat preferensi user selama 24 jam
+- **Tool History**: Track semua penggunaan tools
+- **Fallback**: Otomatis fallback ke in-memory jika Redis tidak available
+
+## Struktur Proyek / Project Structure
 
 ```
-makanin/
-├── config.py           # Configuration and API keys
-├── nlu.py              # Natural Language Understanding (Gemini-powered)
-├── api_clients.py      # API client integrations (Ensemble Data, Google Maps, OpenWeather)
-├── bot.py              # Main bot orchestrator
-├── main.py             # CLI entry point (interactive terminal chat)
-├── discord_bot.py      # Discord bot integration
-├── discord_run.py      # Discord bot runner with pre-launch checks
-├── requirements.txt    # Python dependencies
-├── .env.example        # Template for environment variables
-└── tests/              # Test suite
-    ├── test_nlu.py
-    ├── test_bot_integration.py
-    ├── test_place_extraction.py
-    ├── test_keyword_validation.py
-    ├── test_tiktok_parsing.py
-    └── test_complete_pipeline.py
+makanin-bot/
+├── config.py                    # Konfigurasi dan API keys
+├── bot.py                       # Main bot implementation
+├── discord_run.py               # Discord bot launcher dengan setup checks
+├── api_clients.py               # External API integrations
+├── clear_redis.py               # Redis cleanup utility
+├── agent/                       # Agent system dengan tools
+│   ├── agent.py                # Agent orchestrator utama
+│   ├── memory.py               # Memory management interface
+│   ├── redis_memory.py         # Redis backend untuk persistent storage
+│   ├── tools.py                # Tool registry dan execution
+│   └── prompts.py              # Prompt templates untuk AI
+├── tools/                       # Agent tools (modular)
+│   ├── __init__.py
+│   ├── nlu_tool.py             # Natural Language Understanding
+│   ├── tiktok_search_tool.py   # Pencarian TikTok
+│   ├── location_resolution_tool.py # Resolusi lokasi Google Maps
+│   ├── weather_tool.py         # Cuaca dari OpenWeather
+│   ├── place_extraction_tool.py # Ekstrak nama tempat
+│   └── conversation_tool.py    # Chat percakapan
+├── tests/                       # Test suite
+│   ├── __init__.py
+│   ├── unit/                   # Unit tests
+│   │   ├── __init__.py
+│   │   ├── test_agent.py
+│   │   ├── test_memory.py
+│   │   ├── test_nlu_tool.py
+│   │   ├── test_conversation_tool.py
+│   │   ├── test_place_extraction.py
+│   │   └── test_tools.py
+│   └── functional/             # Integration tests
+│       ├── __init__.py
+│       ├── test_agent_integration.py
+│       └── test_tool_integration.py
+├── logs/                        # Application logs
+├── .env.example                 # Environment template
+├── .env                         # Environment variables (gitignored)
+└── requirements.txt             # Python dependencies
 ```
 
-## Setup
+## Persyaratan Sistem / System Requirements
 
-### 1. Install Dependencies
+### Python & Dependencies
 
+- Python 3.8+
+- Libraries di `requirements.txt` termasuk:
+    - `python-dotenv`: Environment variable management
+    - `google-generativeai`: Gemini AI untuk NLU dan place extraction
+    - `ensembledata`: TikTok search API
+    - `discord.py`: Discord bot integration
+    - `redis`: Persistent memory storage
+    - `requests`: HTTP client untuk external APIs
+
+### External Services / Layanan Eksternal
+
+- **Redis Server** (untuk persistent memory)
+- **Google Gemini API Key** (NLU & place extraction)
+- **Google Maps API Key** (location resolution)
+- **OpenWeather API Key** (weather data)
+- **Ensemble Data Token** (TikTok search)
+- **Discord Bot Token** (Discord integration)
+
+### Redis Installation
+```bash
+# macOS
+brew install redis
+brew services start redis
+
+# Ubuntu/Debian
+sudo apt update
+sudo apt install redis-server
+sudo systemctl start redis-server
+
+# Verify Redis
+redis-cli ping  # Should return: PONG
+```
+
+## Instalasi / Installation
+
+### 1. Clone Repository
+```bash
+git clone https://github.com/queredda/makanin-bot.git
+cd makanin-bot
+```
+
+### 2. Install Dependencies
 ```bash
 pip install -r requirements.txt
 ```
 
-### 2. Get API Credentials
+### 3. Environment Configuration
 
-You need to obtain credentials for the following services:
-
-- **Google Gemini API**: https://ai.google.dev/ (free tier available)
-- **Google Maps API**: https://developers.google.com/maps (enable Places API)
-- **OpenWeather API**: https://openweathermap.org/api (free tier available)
-- **Ensemble Data API**: https://ensembledata.com/ (TikTok data - sign up for token)
-
-### 3. Configure Environment
-
-Copy `.env.example` to `.env` and fill in your credentials:
+Copy `.env.example` ke `.env` dan isi dengan API keys:
 
 ```bash
-cp .env.example .env
+# Google AI
+GEMINI_API_KEY=your_gemini_api_key
+
+# External APIs
+GOOGLE_MAPS_API_KEY=your_maps_api_key
+OPENWEATHER_API_KEY=your_weather_api_key
+ENSEMBLE_DATA_TOKEN=your_ensemble_token
+
+# Discord
+DISCORD_TOKEN=your_discord_bot_token
+
+# Redis Configuration (Optional)
+MEMORY_BACKEND=redis          # atau "memory" untuk fallback
+REDIS_HOST=localhost
+REDIS_PORT=6379
+REDIS_DB=0
+SESSION_TTL=86400            # 24 hours
+CONVERSATION_TTL=604800      # 7 days
 ```
 
-Edit `.env`:
-```
-GEMINI_API_KEY=your_gemini_api_key_here
-GOOGLE_MAPS_API_KEY=your_google_maps_api_key_here
-OPENWEATHER_API_KEY=your_openweather_api_key_here
-ENSEMBLE_DATA_TOKEN=your_ensemble_data_token_here
-DISCORD_TOKEN=your_discord_bot_token_here  # Optional: only for Discord bot
+### 4. Start Redis Server
+```bash
+# Jika menggunakan Redis
+redis-server
+# atau
+brew services start redis  # macOS
 ```
 
-### 4. Install Python Dependencies
+## Cara Penggunaan / Usage
+
+### Discord Bot
 
 ```bash
-pip install -r requirements.txt
+python discord_run.py
 ```
 
-The main dependency is the official **ensembledata** library for TikTok searches:
-```bash
-pip install ensembledata
+### Contoh Percakapan / Example Conversations
+
+**Bahasa Indonesia:**
 ```
+User: cariin bakso enak di jogja
+Makanin: Aku temukan beberapa bakso viral di Jogja! Cek ini:
 
-## Usage
+#1 🍽️ Bakso Pak Min
+🎥 Viral di TikTok: [video link]
+📍 Alamat: Jl. Malioboro No. 123, Jogja
+🗺️ Maps: [maps link]
+🌤️ Cuaca: Cerah, 28°C
 
-### Run the CLI Bot (Interactive Terminal)
-
-```bash
-python main.py
-```
-
-### Run the Discord Bot
-
-1. **Get a Discord bot token:**
-   - Visit [Discord Developer Portal](https://discord.com/developers/applications)
-   - Create a new application
-   - Go to the "Bot" section and create a bot
-   - Copy the bot token
-   - Enable "Message Content Intent" in the Bot settings
-
-2. **Add the token to your `.env` file:**
-   ```
-   DISCORD_TOKEN=your_discord_bot_token_here
-   ```
-
-3. **Invite the bot to your server:**
-   - In the Developer Portal, go to OAuth2 > URL Generator
-   - Select scopes: `bot`
-   - Select bot permissions: `Send Messages`, `Read Message History`, `Embed Links`
-   - Copy and visit the generated URL to invite the bot
-
-4. **Run the Discord bot:**
-   ```bash
-   python discord_run.py
-   ```
-
-The Discord bot listens to all messages and automatically detects food search intent - no slash commands needed! Just chat naturally with the bot in any channel it has access to.
-
-### Example Conversations
-
-**Indonesian:**
-```
-You: Cariin bakso viral deket UGM dong
-Makanin:
-1. Bakso Pak X
-🎥 TikTok: https://vm.tiktok.com/...
-📍 Maps: https://www.google.com/maps/...
-☁️ Cuaca: Cerah berawan, 31°C, Kelembaban 65%, Angin 5.2 km/j
-📌 Jl. Kaliurang, Yogyakarta
+#2 🍽️ Bakso Mercon
+🎥 Viral di TikTok: [video link]
+📍 Alamat: Jl. Gejayan No. 45, Jogja
+🗺️ Maps: [maps link]
+🌤️ Cuaca: Berawan, 26°C
 ```
 
 **English:**
 ```
-You: Find me good ramen near campus
-Makanin:
-1. Ramen Paradise
-🎥 TikTok: https://vm.tiktok.com/...
-📍 Maps: https://www.google.com/maps/...
-☁️ Weather: Partly Cloudy, 28°C, Humidity 70%, Wind 4.8 km/h
-📌 123 Main St, Campus Area
+User: find me good ramen near campus
+Makanin: I found some viral ramen spots near campus! Check these out:
+
+#1 🍽️ Ramen Ichiran
+🎥 Viral on TikTok: [video link]
+📍 Address: Near Campus Area
+🗺️ Maps: [maps link]
+🌤️ Weather: Partly Cloudy, 22°C
 ```
 
-## How It Works
+## Konfigurasi / Configuration
 
-### Food-Finding Flow
-
-1. **NLU Parsing**: Extract keywords, location, constraints (price, halal, etc.)
-2. **Ensemble Search**: Query food venues matching criteria
-3. **Place Resolution**: Extract place names from TikTok descriptions using Gemini
-4. **Google Maps**: Get latitude/longitude and shareable links
-5. **Weather**: Fetch current weather at each venue
-6. **Response**: Format and return results with all information
-
-### NLU Triggers
-
-- **Food Finding**: "cariin", "carin", "find", "hunting", "recommend"
-- **Price Constraints**: "murah" (cheap), "sedang" (medium), "mahal" (expensive)
-- **Halal**: "halal", "no pork"
-- **Location**: "deket" (near), "UGM", "Malioboro", etc.
-
-## Architecture
-
-```
-┌─────────────────────────────────────────────────────┐
-│         User Input (Natural Language)               │
-│    • Terminal (CLI)   • Discord Messages            │
-└──────────────────────┬──────────────────────────────┘
-                       ↓
-        ┌──────────────────────────────┐
-        │    NLU Module (Gemini AI)    │
-        │ Extract: Intent, Keywords,   │
-        │ Location, Constraints        │
-        └──────────────┬───────────────┘
-                       ↓
-        ┌──────────────┴─────────────────┐
-        │                                 │
-   Intent = "find_food"           Intent = "chat"
-        │                                 │
-        ↓                                 ↓
-┌───────────────────┐           ┌────────────────┐
-│ Ensemble Data API │           │  Gemini Chat   │
-│ (TikTok Search)   │           │  (Multi-turn)  │
-└────────┬──────────┘           └───────┬────────┘
-         ↓                               ↓
-  Get TikTok Videos              Return Chat Reply
-  (with engagement stats)               │
-         │                               │
-         ↓                               │
-  ┌──────────────┐                      │
-  │  Gemini AI   │                      │
-  │  (Extract    │                      │
-  │  restaurant  │                      │
-  │  names from  │                      │
-  │  TikTok)     │                      │
-  └──────┬───────┘                      │
-         ↓                               │
-  ┌──────────────┐                      │
-  │ Google Maps  │                      │
-  │ (Resolve     │                      │
-  │ locations +  │                      │
-  │ share links) │                      │
-  └──────┬───────┘                      │
-         ↓                               │
-  ┌──────────────┐                      │
-  │ OpenWeather  │                      │
-  │ (Get current │                      │
-  │ weather at   │                      │
-  │ venue)       │                      │
-  └──────┬───────┘                      │
-         ↓                               │
-  Format Response                       │
-  (with all info)                       │
-         │                               │
-         └───────────┬───────────────────┘
-                     ↓
-        ┌────────────────────────┐
-        │   Return to User via:  │
-        │   • CLI (terminal)     │
-        │   • Discord (embeds)   │
-        └────────────────────────┘
-```
-
-## Configuration
-
-### Adjustable Settings
-
-Edit `config.py`:
-
+### Environment Variables
 ```python
-DEFAULT_LANGUAGE = "id"      # Default language (id/en)
-MAX_RESULTS = 5              # Max food venues to return
-TIMEOUT = 10                 # API request timeout (seconds)
+# API Keys (Required)
+GEMINI_API_KEY = "your_gemini_key"
+GOOGLE_MAPS_API_KEY = "your_maps_key"
+OPENWEATHER_API_KEY = "your_weather_key"
+ENSEMBLE_DATA_TOKEN = "your_ensemble_token"
+DISCORD_TOKEN = "your_discord_token"
+
+# Redis Configuration (Optional)
+MEMORY_BACKEND = "redis"  # "redis" atau "memory"
+REDIS_HOST = "localhost"
+REDIS_PORT = 6379
+REDIS_DB = 0
+REDIS_PASSWORD = None  # Jika menggunakan password
+
+# TTL Settings (Optional)
+SESSION_TTL = 86400  # 24 jam
+CONVERSATION_TTL = 604800  # 7 hari
+TOOL_EXECUTION_TTL = 604800  # 7 hari
+
+# Bot Settings (Optional)
+DEFAULT_LANGUAGE = "id"  # "id" atau "en"
+MAX_RESULTS = 10
+GEMINI_MODEL = "gemini-2.5-flash"
 ```
 
-## TikTok Search Integration
+## Arsitektur Sistem / System Architecture
 
-Makanin uses the **Ensemble Data API** with the official `ensembledata` Python library to search TikTok for viral food content.
+### Agent-Based Architecture
 
-### How it Works
-
-1. User enters a food query: "Cariin bakso viral deket UGM"
-2. NLU extracts keywords ("bakso") and location ("UGM")
-3. Ensemble Data API searches TikTok: `client.tiktok.full_keyword_search(keyword="bakso UGM", period="7")`
-4. Returns trending TikTok videos about bakso near UGM from the last 7 days
-5. For each video:
-   - Extracts place name from video description using Gemini AI
-   - Resolves address on Google Maps
-   - Fetches current weather
-   - Returns clickable links with engagement metrics
-
-### Sample Ensemble Data API Usage
-
-```python
-from ensembledata.api import EDClient
-
-client = EDClient(token="YOUR-TOKEN")
-
-# Search for viral food content
-result = client.tiktok.full_keyword_search(
-    keyword="bakso viral",
-    period="7",  # Last 7 days
-)
-
-print(result.data)  # List of TikTok videos
-print(result.units_charged)  # API usage
+```
+User Message
+       ↓
+   [NLU Tool] - Pahami intent & ekstrak entities
+       ↓
+   [Agent] - Pilih tools yang dibutuhkan secara dinamis
+       ↓
+┌─────────────────────────────────┐
+│  Tool Execution (Parallel)      │
+│  • TikTok Search Tool           │
+│  • Location Resolution Tool     │
+│  • Weather Tool                 │
+│  • Place Extraction Tool        │
+└─────────────────────────────────┘
+       ↓
+   [Format Response] - Gabung semua hasil
+       ↓
+   User Response (Natural language)
 ```
 
-## Error Handling
+### Memory Architecture
 
-- If a venue location cannot be resolved, it's skipped with a note
-- If weather data is unavailable, response shows location only
-- If Ensemble Data API is down or returns no results, bot suggests trying different keywords
-- If Gemini place extraction fails, uses the video author's name as fallback
-- All API timeouts are handled gracefully with informative error messages
+```
+┌─────────────────────────────────┐
+│         Redis (Persistent)       │
+├─────────────────────────────────┤
+│ • Sessions (24h TTL)            │
+│ • Conversations (7d TTL)        │
+│ • Tool Executions (7d TTL)      │
+└─────────────────────────────────┘
+              ↕
+┌─────────────────────────────────┐
+│      In-Memory (Cache)          │
+├─────────────────────────────────┤
+│ • Active sessions               │
+│ • Recent conversations          │
+│ • Tool results cache            │
+└─────────────────────────────────┘
+```
 
-## Testing
+## Integrasi Redis / Redis Integration
 
-### Run Tests
+### Fitur Persisten / Persistent Features
 
-The project includes a comprehensive test suite in the `tests/` folder:
+- **7-Day Conversation Memory**: Bot ingat percakapan selama seminggu
+- **24-Hour Sessions**: Ingat preferensi user (bahasa, intent terakhir)
+- **Tool Execution History**: Track semua tools yang digunakan
+- **Automatic Cleanup**: Data otomatis dihapus setelah TTL expired
+
+### Redis Management
+```bash
+# Check Redis status
+redis-cli ping
+
+# Check all keys
+redis-cli keys "makanin:*"
+
+# Monitor memory usage
+redis-cli info memory
+
+# Clear all Makanin data
+python clear_redis.py
+
+# Clear specific data types
+python clear_redis.py --sessions-only     # Hapus session data saja
+python clear_redis.py --conversations-only # Hapus percakapan saja
+python clear_redis.py --tools-only        # Hapus tool execution history
+```
+
+### Redis Features Implementation
+
+- **ContextManager**: Interface abstrak untuk memory management
+- **RedisMemory**: Implementasi Redis dengan auto-reconnection
+- **InMemoryMemory**: Fallback storage saat Redis tidak available
+- **Automatic Cleanup**: TTL-based expiration untuk semua data
+- **Error Handling**: Graceful fallback saat Redis connection failed
+
+### Logging & Monitoring
 
 ```bash
-# Test NLU module
-python tests/test_nlu.py
+# Check application logs
+tail -f logs/makanin.log
 
-# Test place extraction from TikTok
-python tests/test_place_extraction.py
+# Monitor Redis activity
+grep "Redis" logs/makanin.log
 
-# Test keyword validation
-python tests/test_keyword_validation.py
+# Monitor tool executions
+grep "Tool Execution" logs/makanin.log
 
-# Test TikTok parsing
-python tests/test_tiktok_parsing.py
-
-# Test bot integration
-python tests/test_bot_integration.py
-
-# Test complete pipeline
-python tests/test_complete_pipeline.py
+# Monitor Discord bot activity
+grep "Discord" logs/makanin.log
 ```
 
-### Example Test
+### Log Categories
 
-```python
-from nlu import NLUEngine
-import config
-
-nlu = NLUEngine(api_key=config.GEMINI_API_KEY)
-slots = nlu.parse_user_input("Cariin bakso murah deket UGM dong")
-
-print(slots.intent)        # "find_food"
-print(slots.keywords)      # ["bakso"]
-print(slots.location)      # "UGM"
-print(slots.constraints)   # {"price": "cheap"}
-```
-
-## Future Enhancements
-
-- [ ] Add user ratings and reviews
-- [ ] Filter by operating hours
-- [ ] Support for dietary restrictions
-- [ ] Recommendation engine based on user preferences
-- [ ] Multi-language support (more languages)
-- [ ] Integration with delivery apps
-- [ ] Caching for frequently searched locations
-- [ ] Analytics dashboard
+- **Agent**: Agent orchestration dan decision making
+- **Memory**: Redis operations dan fallback mechanisms
+- **Tools**: Individual tool execution dan errors
+- **Discord**: Bot interactions dan user messages
+- **API**: External API calls dan responses
 
 ## Troubleshooting
 
-**Missing API Keys**
-- Check `.env` file is created and keys are set
-- Ensure no extra spaces in `.env`
+### Masalah Umum / Common Issues
 
-**Location Not Resolved**
-- Try using full venue names in TikTok descriptions
-- Check if place exists on Google Maps
+**Redis Connection Failed:**
 
-**Rate Limiting**
-- Add exponential backoff for API retries
-- Check API quota in each service's dashboard
+```bash
+# Start Redis server
+redis-server
+
+# Check if Redis is running
+redis-cli ping
+```
+
+**API Key Issues:**
+
+- Pastikan semua API keys valid dan active
+- Check rate limits untuk setiap API service
+- Verify environment variables di .env file
+
+**Bot Not Responding:**
+
+- Check Discord bot permissions di server
+- Verify bot memiliki `Message Content Intent` enabled
+- Check log output untuk error messages
+
+### Error Messages / Pesan Error
+
+```
+[Agent] Error processing message: Connection failed
+→ Redis tidak tersedia, bot akan fallback ke in-memory
+
+[Redis Memory] Failed to connect to Redis: Connection refused
+→ Start Redis server atau set MEMORY_BACKEND=memory
+
+[Tool] Execution failed: API quota exceeded
+→ Check API quota dan rate limits
+```
+
+## Development
+
+### Project Architecture
+
+- **Agent-Based System**: Modular tool execution dengan dynamic selection
+- **Tool Registry**: Centralized tool management di `agent/tools.py`
+- **Memory Abstraction**: Pluggable memory backends (Redis/In-Memory)
+- **Error Resilience**: Auto-fallback dan graceful error handling
+- **Logging**: Comprehensive logging dengan structured output
+
+### Adding New Tools
+
+1. Create new tool class di `tools/` directory
+2. Extend `BaseTool` class dari `tools/base_tool.py`
+3. Implement `execute()` method dengan proper error handling
+4. Add tool metadata (name, description, parameters)
+5. Import di `agent/agent.py` di `_register_tools()`
+6. Add unit tests di `tests/unit/test_new_tool.py`
+
+### Testing Framework
+
+```bash
+# Run all tests
+python -m pytest tests/ -v
+
+# Run unit tests only
+python -m pytest tests/unit/ -v
+
+# Run integration tests only
+python -m pytest tests/functional/ -v
+
+# Run specific test file
+python -m pytest tests/unit/test_agent.py -v
+
+# Run with coverage
+python -m pytest tests/ --cov=agent --cov=tools --cov-report=html
+
+# Test Redis connection
+python -c "from agent.memory import ContextManager; cm = ContextManager()"
+
+# Test bot components
+python -c "from bot import MakaninBot; print('Bot import successful')"
+```
+
+### Test Structure
+
+- **Unit Tests**: Test individual components dan tools
+- **Integration Tests**: Test agent workflows dan tool interactions
+- **Memory Tests**: Test Redis dan in-memory storage
+- **NLU Tests**: Test natural language understanding
+- **Tool Tests**: Test individual tool functionality
 
 ## License
 
-MIT License - Feel free to use and modify!
-
+Project ini dibuat untuk tujuan akademis dan pembelajaran Pemrosesan Bahasa Alami.

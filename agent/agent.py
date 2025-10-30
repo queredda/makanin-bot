@@ -1,11 +1,12 @@
-# Main Agent Orchestrator for Makanin bot
-# Replaces hardcoded logic with intelligent LLM-powered tool selection and execution
+# Agent Utama untuk Bot Makanin
+# Mengganti logika hardcoded dengan pemilihan tools yang cerdas and execution
 
 from typing import Dict, Any, List, Optional, Tuple
 import json
 import google.generativeai as genai
 import config
 
+# Import tools untuk agent
 from agent.tools import ToolRegistry, ToolExecutor, ToolInput, tool_registry
 from agent.memory import ContextManager
 from agent.prompts import (
@@ -17,26 +18,25 @@ from agent.prompts import (
 
 
 class MakaninAgent:
-    """Intelligent agent that decides which tools to use based on user input"""
+    """Agent cerdas yang memutuskan tools mana yang digunakan berdasarkan input user"""
 
     def __init__(self):
-        # Initialize components
-        self.tool_registry = tool_registry  # Use the global registry
+        # Inisialisasi komponen
+        self.tool_registry = tool_registry  # Gunakan registry global
         self.tool_executor = ToolExecutor(self.tool_registry)
         self.context_manager = ContextManager()
 
-        # Initialize Gemini for agent reasoning
+        # Inisialisasi Gemini untuk reasoning agent
         genai.configure(api_key=config.GEMINI_API_KEY)
         self.reasoning_model = genai.GenerativeModel(config.GEMINI_MODEL)
 
-        # Register all tools
+        # Daftarkan semua tools
         self._register_tools()
 
-        print("🤖 Makanin Agent initialized with tools:", self.tool_registry.list_tools())
+        print("Makanin Agent initialized with tools:", self.tool_registry.list_tools())
 
     def _register_tools(self) -> None:
-        """Register all available tools"""
-        # Import tools to trigger registration
+        # Import tools untuk trigger registrasi
         import tools.tiktok_search_tool
         import tools.location_resolution_tool
         import tools.weather_tool
@@ -45,8 +45,7 @@ class MakaninAgent:
         import tools.nlu_tool
 
     async def process_message(self, user_id: str, user_message: str) -> str:
-        """Process a user message and return the agent's response"""
-        print(f"\n🚀 [Agent] Processing message from {user_id}: '{user_message}'")
+        print(f"\n[Agent] Processing message from {user_id}: '{user_message}'")
 
         try:
             # Process user input and update context
@@ -58,7 +57,7 @@ class MakaninAgent:
                 return self._handle_error("NLU analysis failed", nlu_result.error)
 
             intent_data = nlu_result.data
-            print(f"🎯 [Agent] Intent: {intent_data['intent']}, Keywords: {intent_data['keywords']}")
+            print(f"[Agent] Intent: {intent_data['intent']}, Keywords: {intent_data['keywords']}")
 
             # Update session data
             self.context_manager.update_user_preferences(
@@ -81,11 +80,10 @@ class MakaninAgent:
             return response
 
         except Exception as e:
-            print(f"❌ [Agent] Error processing message: {e}")
+            print(f"[Agent] Error processing message: {e}")
             return self._handle_error("Processing failed", str(e))
 
     async def _handle_food_search_intent(self, user_id: str, intent_data: Dict[str, Any], user_message: str) -> str:
-        """Handle food search intent with tool orchestration"""
         language = intent_data.get("language", "id")
         keywords = intent_data.get("keywords", [])
         location = intent_data.get("location")
@@ -102,11 +100,11 @@ class MakaninAgent:
         })
 
         if not tiktok_result.success or not tiktok_result.data:
-            print("❌ [Agent] No TikTok results found")
+            print("[Agent] No TikTok results found")
             return format_food_response([], language)
 
         tiktok_results = tiktok_result.data
-        print(f"📱 [Agent] Found {len(tiktok_results)} TikTok results")
+        print(f"[Agent] Found {len(tiktok_results)} TikTok results")
 
         # Step 2: Process each TikTok result to extract venue info
         venues = []
@@ -121,11 +119,11 @@ class MakaninAgent:
             })
 
             if not extraction_result.success:
-                print(f"⏭️  Skipped: Could not extract restaurant name")
+                print("[Agent] Skipped: Could not extract restaurant name")
                 continue
 
             place_name = extraction_result.data["place_name"]
-            print(f"🏪 Extracted place name: {place_name}")
+            print(f"[Agent] Extracted place name: {place_name}")
 
             # Resolve location using Google Maps
             location_result = await self._execute_tool("location_resolution", {
@@ -134,11 +132,11 @@ class MakaninAgent:
             })
 
             if not location_result.success:
-                print(f"⏭️  Skipped: Could not resolve location for '{place_name}'")
+                print(f"[Agent] Skipped: Could not resolve location for '{place_name}'")
                 continue
 
             location_data = location_result.data
-            print(f"📍 Found location: {location_data.get('address', 'Unknown')}")
+            print(f"[Agent] Found location: {location_data.get('address', 'Unknown')}")
 
             # Get weather information
             weather_result = await self._execute_tool("weather", {
@@ -150,7 +148,7 @@ class MakaninAgent:
             weather_summary = None
             if weather_result.success:
                 weather_summary = weather_result.data.get("summary")
-                print(f"🌤️  Weather: {weather_summary}")
+                print(f"[Agent] Weather: {weather_summary}")
 
             # Build venue object
             venue = {
@@ -167,7 +165,7 @@ class MakaninAgent:
 
             venues.append(venue)
 
-        print(f"\n✅ [Agent] Food search completed: {len(venues)} venues found")
+        print(f"\n[Agent] Food search completed: {len(venues)} venues found")
 
         # Step 3: Generate response
         if venues:
@@ -176,13 +174,11 @@ class MakaninAgent:
             return format_food_response([], language)
 
     async def _handle_chat_intent(self, user_id: str, intent_data: Dict[str, Any], user_message: str) -> str:
-        """Handle general conversation intent"""
         language = intent_data.get("language", "id")
         conversation_history = self.context_manager.memory.get_conversation_history(user_id, 5)
 
-        print(f"💬 [Agent] Handling conversation intent")
+        print(f"[Agent] Handling conversation intent")
 
-        # Use conversation tool
         conversation_result = await self._execute_tool("conversation", {
             "user_message": user_message,
             "conversation_history": conversation_history,
@@ -195,7 +191,6 @@ class MakaninAgent:
             return self._handle_error("Conversation failed", conversation_result.error, language)
 
     async def _execute_tool(self, tool_name: str, parameters: Dict[str, Any]) -> Any:
-        """Execute a tool and record the result"""
         import time
         start_time = time.time()
 
@@ -219,7 +214,7 @@ class MakaninAgent:
             return result
 
         except Exception as e:
-            print(f"❌ [Agent] Tool execution failed: {e}")
+            print(f"[Agent] Tool execution failed: {e}")
             # Return error result
             error_result = type('Result', (), {
                 'success': False,
@@ -230,12 +225,12 @@ class MakaninAgent:
 
     def _handle_error(self, error_type: str, error_message: str, language: str = "id") -> str:
         """Handle errors and return appropriate responses"""
-        print(f"❌ [Agent] {error_type}: {error_message}")
+        print(f"[Agent] {error_type}: {error_message}")
 
         if language == "id":
-            return "Ah sorry! Terjadi kesalahan nih 😅 Bisa coba lagi? Terimakasih! 😊"
+            return "Ah sorry! Terjadi kesalahan nih. Bisa coba lagi? Terimakasih!"
         else:
-            return "Oops! Something went wrong there 😅 Can you try again? Thanks! 😊"
+            return "Oops! Something went wrong there. Can you try again? Thanks!"
 
     def _get_used_tools(self) -> List[str]:
         """Get list of tools used in recent executions"""
@@ -267,7 +262,7 @@ class MakaninAgent:
             plan_json = json.loads(response.text.strip())
             return plan_json
         except Exception as e:
-            print(f"❌ [Agent] Plan generation failed: {e}")
+            print(f"[Agent] Plan generation failed: {e}")
             # Return fallback plan
             return {
                 "reasoning": "Failed to generate plan, using fallback",

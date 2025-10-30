@@ -57,9 +57,9 @@ class LocationResolutionTool(BaseTool):
             venue_name = params["venue_name"].strip()
             location_hint = params.get("location_hint")
 
-            print(f"📍 [Location Resolution] Searching for: '{venue_name}'")
+            print(f"[Location Resolution] Searching for: '{venue_name}'")
             if location_hint:
-                print(f"📍 [Location Resolution] Location hint: '{location_hint}'")
+                print(f"[Location Resolution] Location hint: '{location_hint}'")
 
             # Build search query
             search_query = venue_name
@@ -69,7 +69,7 @@ class LocationResolutionTool(BaseTool):
             # Search for the venue
             results = self.client.text_search(search_query)
             if not results:
-                print(f"❌ [Location Resolution] No results found for '{venue_name}'")
+                print(f"[Location Resolution] No results found for '{venue_name}'")
                 return ToolResult(
                     success=False,
                     error=f"Location not found for venue: {venue_name}",
@@ -85,7 +85,7 @@ class LocationResolutionTool(BaseTool):
             place_id = top_result.get("place_id")
 
             if not place_id:
-                print(f"❌ [Location Resolution] No place_id found for '{venue_name}'")
+                print(f"[Location Resolution] No place_id found for '{venue_name}'")
                 return ToolResult(
                     success=False,
                     error=f"No place ID found for venue: {venue_name}",
@@ -99,7 +99,7 @@ class LocationResolutionTool(BaseTool):
             # Get detailed place information
             details = self.client.get_place_details(place_id)
             if not details or "geometry" not in details:
-                print(f"❌ [Location Resolution] No details found for '{venue_name}'")
+                print(f"[Location Resolution] No details found for '{venue_name}'")
                 return ToolResult(
                     success=False,
                     error=f"Could not get details for venue: {venue_name}",
@@ -132,8 +132,8 @@ class LocationResolutionTool(BaseTool):
                 "opening_hours": details.get("opening_hours")
             }
 
-            print(f"✅ [Location Resolution] Found location for '{venue_name}'")
-            print(f"📍 [Location Resolution] Address: {location_data['address']}")
+            print(f"[Location Resolution] Found location for '{venue_name}'")
+            print(f"[Location Resolution] Address: {location_data['address']}")
 
             return ToolResult(
                 success=True,
