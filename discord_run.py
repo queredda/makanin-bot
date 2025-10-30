@@ -11,8 +11,9 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent))
 
 import config
-from discord_bot import main
+import discord
 import asyncio
+from bot import DiscordMakaninBot
 
 
 def check_setup():
@@ -42,6 +43,27 @@ def check_setup():
     print("All API keys configured!")
     print("Ready to start Discord bot\n")
     return True
+
+
+async def main():
+    """Start the Discord bot"""
+    if not config.DISCORD_TOKEN:
+        print("Error: DISCORD_TOKEN not found in .env file")
+        print("Please add DISCORD_TOKEN to your .env file")
+        return
+
+    print("\n" + "=" * 60)
+    print("Starting Makanin Discord Bot...")
+    print("=" * 60 + "\n")
+
+    try:
+        bot = DiscordMakaninBot()
+        async with bot:
+            await bot.start(config.DISCORD_TOKEN)
+    except Exception as e:
+        print(f"Failed to start bot: {e}")
+        import traceback
+        traceback.print_exc()
 
 
 if __name__ == "__main__":

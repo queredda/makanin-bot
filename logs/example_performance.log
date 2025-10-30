@@ -1,0 +1,43 @@
+2024-01-15 10:30:15,123 - PERF - Agent initialization completed in 1.23s
+2024-01-15 10:30:45,456 - PERF - Message processing started for user: user123
+2024-01-15 10:30:46,123 - PERF - NLU Tool execution: 0.33s (success)
+2024-01-15 10:30:47,789 - PERF - TikTok Search Tool execution: 1.33s (success)
+2024-01-15 10:30:48,456 - PERF - Place Extraction Tool execution: 0.33s (success)
+2024-01-15 10:30:49,123 - PERF - Location Resolution Tool execution: 0.33s (success)
+2024-01-15 10:30:49,456 - PERF - Weather Tool execution: 0.33s (success)
+2024-01-15 10:30:51,123 - PERF - Message processing completed for user123 in 5.67s total
+2024-01-15 10:32:15,456 - PERF - Message processing started for user: user456
+2024-01-15 10:32:16,123 - PERF - NLU Tool execution: 0.33s (success)
+2024-01-15 10:32:17,789 - PERF - Conversation Tool execution: 1.33s (success)
+2024-01-15 10:32:17,789 - PERF - Message processing completed for user456 in 2.33s total
+2024-01-15 10:35:30,123 - PERF - Message processing started for user: user789
+2024-01-15 10:35:30,789 - PERF - NLU Tool execution: 0.33s (success)
+2024-01-15 10:35:32,789 - PERF - TikTok Search Tool execution: 2.00s (success)
+2024-01-15 10:35:33,123 - PERF - Place Extraction Tool execution: 0.33s (success)
+2024-01-15 10:35:33,456 - PERF - Location Resolution Tool execution: 0.33s (failed: timeout)
+2024-01-15 10:35:34,789 - PERF - Place Extraction Tool execution: 0.33s (success)
+2024-01-15 10:35:35,123 - PERF - Location Resolution Tool execution: 0.33s (success)
+2024-01-15 10:35:35,456 - PERF - Weather Tool execution: 0.33s (success)
+2024-01-15 10:35:37,123 - PERF - Message processing completed for user789 in 7.00s total
+2024-01-15 10:40:22,456 - PERF - Message processing started for user: user_error
+2024-01-15 10:40:22,789 - PERF - NLU Tool execution: 0.33s (success)
+2024-01-15 10:40:22,789 - ERROR - TikTok Search Tool execution: 0.00s (failed: API timeout)
+2024-01-15 10:40:22,789 - PERF - Message processing completed for user_error in 0.33s total (with errors)
+2024-01-15 10:45:10,123 - PERF - Message processing started for user: user999
+2024-01-15 10:45:10,789 - PERF - NLU Tool execution: 0.33s (success)
+2024-01-15 10:45:11,456 - PERF - TikTok Search Tool execution: 0.67s (success, no results)
+2024-01-15 10:45:11,789 - PERF - Message processing completed for user999 in 1.67s total
+
+=== PERFORMANCE SUMMARY ===
+Total messages processed: 5
+Average processing time: 3.40s
+Fastest processing: 0.33s (user_error with errors)
+Slowest processing: 7.00s (user789 with location resolution retry)
+Success rate: 80% (4/5 successful)
+Tool execution times:
+- NLU Tool: avg 0.33s (100% success)
+- TikTok Search: avg 1.33s (75% success)
+- Place Extraction: avg 0.33s (100% success)
+- Location Resolution: avg 0.33s (67% success)
+- Weather Tool: avg 0.33s (100% success)
+- Conversation Tool: avg 1.33s (100% success)

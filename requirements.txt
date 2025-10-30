@@ -11,3 +11,6 @@ discord.py==2.3.2
 
 # Optional: For better stability
 aiohttp==3.9.1
+
+# Redis for persistent memory
+redis==5.0.1
