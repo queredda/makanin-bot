@@ -44,7 +44,7 @@ async def on_ready():
 async def on_message(message: discord.Message):
     """
     Listen to all messages and respond intelligently.
-    Automatically detects food search intent using NLU.
+    Automatically detects food search intent using the agent system.
     """
     # Don't respond to bot messages
     if message.author.bot:
@@ -61,14 +61,13 @@ async def on_message(message: discord.Message):
     # Show typing indicator while processing
     async with message.channel.typing():
         try:
-            # Use NLU to parse the user input
-            slots = makanin.nlu.parse_user_input(message.content)
+            # Use the agent system to process the message
+            response = await makanin.agent.process_message(str(message.author.id), message.content)
 
-            # Get bot response
-            response = makanin.chat(message.content)
-
-            # Check if this is a food finding response
-            if slots.intent == "find_food" and response:
+            # Determine if this is a food finding response by checking the response content
+            # The agent system already formats responses appropriately
+            if any(indicator in response for indicator in
+                   ["🍽️", "🎥 Viral di TikTok", "🎥 Viral on TikTok", "Maps:", "📍"]):
                 # Send as formatted embeds
                 await send_food_results(message, response)
             else:
